@@ -1,10 +1,13 @@
-import express from 'express';
-import { login, register } from '../controllers/AuthController';
-import checkToken from '../middlewares/checkToken';
-import { app } from '../controllers/AdminController';
+import express from "express";
+import { login, register } from "../controllers/AuthController";
+import checkToken from "../middlewares/checkToken";
+import { allowUser, app, showUsers } from "../controllers/AdminController";
 
-const appRouter = express.Router();
+const adminRouter = express.Router();
 
-appRouter.get("/check",checkToken,app);
+adminRouter.get("/check", checkToken, app);
+adminRouter.get("/showUsers", checkToken, showUsers);
+adminRouter.get("/allowUser/:userId", checkToken, allowUser);
+adminRouter.get("/revokeAccess", checkToken, allowUser);
 
-export default appRouter;
+export default adminRouter;

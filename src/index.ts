@@ -1,12 +1,12 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import bodyParser from 'body-parser';
+import bodyParser from "body-parser";
 import cors from "cors";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import { login } from "./controllers/AuthController";
 import authRouter from "./routes/authRoutes";
-import appRouter from "./routes/AdminRoutes";
+import adminRouter from "./routes/AdminRoutes";
 dotenv.config();
 
 const app = express();
@@ -21,11 +21,11 @@ app.use(
 );
 
 const port = process.env.PORT || 3000;
-const hashedPassword = bcrypt.hashSync("admin@123",12);
+const hashedPassword = bcrypt.hashSync("admin@123", 12);
 const db = new PrismaClient();
 
 app.use("/", authRouter);
-app.use("/app", appRouter)
+app.use("/admin", adminRouter);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
