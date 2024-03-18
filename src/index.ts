@@ -4,9 +4,9 @@ import bodyParser from 'body-parser';
 import cors from "cors";
 import bcrypt from "bcrypt"
 import { PrismaClient } from "@prisma/client";
-import { login } from "./controllers/loginController";
+import { login } from "./controllers/AuthController";
 import authRouter from "./routes/authRoutes";
-import appRouter from "./routes/protectedRoute";
+import appRouter from "./routes/AdminRoutes";
 dotenv.config();
 
 const app = express();
