@@ -5,8 +5,8 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import { login } from "./controllers/AuthController";
-import authRouter from "./routes/AuthRoutes";
-import adminRouter from "./routes/AdminRoutes";
+import authRouter from "./routes/authRoutes";
+import adminRouter from "./routes/ProtectedRoutes";
 dotenv.config();
 
 const app = express();
