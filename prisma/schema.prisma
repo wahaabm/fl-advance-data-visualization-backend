@@ -28,3 +28,11 @@ model Article {
   author    User    @relation(fields: [authorId], references: [id])
   authorId  Int
 }
+
+model Plot {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  xValues     Json?
+  yValues     Json?
+}

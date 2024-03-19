@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt, { VerifyCallback } from "jsonwebtoken";
 import prisma from "../utils/prismaClient";
+import multer from "multer";
 const privatekey: string = process.env.PRIVATE_KEY!;
 
 export async function app(req: Request, res: Response): Promise<void> {
@@ -168,3 +169,5 @@ export async function revokeUser(req: Request, res: Response): Promise<void> {
     }
   });
 }
+
+export async function uploadChartCSV(req: Request, res: Response) {}
