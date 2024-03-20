@@ -3,9 +3,9 @@ import prisma from "../utils/prismaClient";
 import { parse } from "csv-parse/sync";
 
 export async function uploadChartCSV(req: Request, res: Response) {
-  const { userId } = req.params;
-  const { role } = req.authorizedData!;
-  if (role !== "ADMIN_USER" || role !== "EDITOR_USER") {
+  const { id:userId,role } = req.authorizedData!;
+  
+  if (role !== "ADMIN_USER" && role !== "EDITOR_USER") {
     res.sendStatus(403);
   }
   const csvData = req.file?.buffer.toString("utf8");

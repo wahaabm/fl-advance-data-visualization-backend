@@ -21,17 +21,17 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 protectedRouter.get("/showUsers", checkToken, showUsers);
-protectedRouter.get("/allowUser/:userId", checkToken, allowUser);
-protectedRouter.get("/revokeUser/:userId", checkToken, revokeUser);
-protectedRouter.get("/removeEditor/:userId", checkToken, removeEditor);
-protectedRouter.get("/makeEditor/:userId", checkToken, makeEditor);
+protectedRouter.post("/allowUser/:userId", checkToken, allowUser);
+protectedRouter.post("/revokeUser/:userId", checkToken, revokeUser);
+protectedRouter.post("/removeEditor/:userId", checkToken, removeEditor);
+protectedRouter.post("/makeEditor/:userId", checkToken, makeEditor);
 
-protectedRouter.post("/addArticle/:userId", checkToken, addArticle);
-protectedRouter.delete("/deleteArticle/:articleId", checkToken, deleteArticle);
-protectedRouter.put("/editArticle/:articleId", checkToken, editArticle);
+protectedRouter.post("/article", checkToken, addArticle);
+protectedRouter.delete("/article/:articleId", checkToken, deleteArticle);
+protectedRouter.put("/article/:articleId", checkToken, editArticle);
 
 protectedRouter.post(
-  "/uploadCSV/:userId",
+  "/csv",
   upload.single("csvFile"),
   checkToken,
   uploadChartCSV

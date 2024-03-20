@@ -13,6 +13,7 @@ declare global {
 declare global {
   namespace jwt {
     interface JwtPayload {
+      id?: string;
       email?: string;
       role?: string;
     }

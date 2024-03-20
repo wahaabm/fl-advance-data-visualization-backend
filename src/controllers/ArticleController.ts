@@ -6,8 +6,7 @@ const privatekey: string = process.env.PRIVATE_KEY!;
 
 export async function addArticle(req: Request, res: Response) {
   const { title, content, published } = req.body;
-  const authorId = parseInt(req.params.userId);
-  const { role } = req.authorizedData!;
+  const { id:authorId,role } = req.authorizedData!;
   if (role === "ADMIN_USER" || role === "EDITOR_USER") {
     // Check if the user is authorized
     const user = await prisma.user.findUnique({
