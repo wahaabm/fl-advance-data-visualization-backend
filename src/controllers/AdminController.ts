@@ -47,7 +47,7 @@ export async function makeEditor(req: Request, res: Response): Promise<void> {
     try {
       const user = await prisma.user.update({
         where: { id: parseInt(userId) },
-        data: { role: "EDITOR_USER" },
+        data: { role: "EDITOR_USER", isAuthorized: true },
       });
       res.status(201).json({ message: "User has been made editor" });
     } catch (error) {
@@ -66,7 +66,7 @@ export async function removeEditor(req: Request, res: Response): Promise<void> {
     try {
       const user = await prisma.user.update({
         where: { id: parseInt(userId) },
-        data: { role: "NORMAL_USER" },
+        data: { role: "NORMAL_USER", isAuthorized: false },
       });
       res.status(201).json({ message: "User has been removed as editor" });
     } catch (error) {

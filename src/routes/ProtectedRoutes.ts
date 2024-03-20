@@ -14,7 +14,6 @@ import {
   editArticle,
 } from "../controllers/ArticleController";
 import { uploadChartCSV, deleteChart } from "../controllers/ChartController";
-
 import multer from "multer";
 
 const protectedRouter = express.Router();
