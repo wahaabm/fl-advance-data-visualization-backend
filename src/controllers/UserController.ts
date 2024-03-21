@@ -34,20 +34,3 @@ export async function showCharts(req: Request, res: Response) {
     res.status(201).json(charts);
   }
 }
-
-export async function showUsers(req: Request, res: Response) {
-  try {
-    const { role } = req.authorizedData!;
-    if (role === "ADMIN_USER" || role === "EDITOR_USER") {
-      const allUsers = await prisma.user.findMany({
-        select: { id: true, email: true, role: true, isAuthorized: true },
-      });
-      res.status(201).send(allUsers);
-    } else {
-      res.status(403).json({ message: "Forbidden." });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error!" });
-  }
-}
