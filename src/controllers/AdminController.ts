@@ -28,7 +28,14 @@ export async function showUsers(req: Request, res: Response) {
     const { role } = req.authorizedData!;
     if (role === "ADMIN_USER" || role === "EDITOR_USER") {
       const allUsers = await prisma.user.findMany({
-        select: { id: true, email: true, role: true, isAuthorized: true },
+        where: {
+          NOT: {
+            role: "ADMIN_USER",
+          },
+        },
+        orderBy: {
+          id: "asc",
+        },
       });
       res.status(201).send(allUsers);
     } else {

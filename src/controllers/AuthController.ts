@@ -26,7 +26,12 @@ export async function login(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const token = createSecretToken(user.id, user.email, user.role);
+    const token = createSecretToken(
+      user.id,
+      user.email,
+      user.role,
+      user.isAuthorized
+    );
     res.status(200).json({ message: "Login successful", token });
   } catch (error) {
     console.error("Error during login:", error);

@@ -20,7 +20,7 @@ const protectedRouter = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-protectedRouter.get("/showUsers", checkToken, showUsers);
+protectedRouter.get("/users", checkToken, showUsers);
 protectedRouter.post("/allowUser/:userId", checkToken, allowUser);
 protectedRouter.post("/revokeUser/:userId", checkToken, revokeUser);
 protectedRouter.post("/removeEditor/:userId", checkToken, removeEditor);
