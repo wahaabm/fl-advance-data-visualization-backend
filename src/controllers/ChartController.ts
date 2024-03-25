@@ -50,3 +50,46 @@ export async function deleteChart(req: Request, res: Response) {
     res.sendStatus(500);
   }
 }
+
+export async function addChartData(req: Request, res: Response) {
+  try {
+    const { chartId } = req.params;
+    const { role, userId } = req.authorizedData!;
+
+    if (role !== "ADMIN_USER" && role !== "EDITOR_USER") {
+      return res.sendStatus(403); // Forbidden
+    }
+
+    const { formDataToSubmit } = req.body;
+    console.log(formDataToSubmit)
+    const existingChart = await prisma.plot.findUnique({
+      where: {
+        id: parseInt(chartId), 
+      },
+    });
+
+    if (!existingChart) {
+      return res.status(404).json({ error: "Chart not found" });
+    }
+
+    if (role === "EDITOR_USER" && existingChart.authorId !== userId) {
+      return res.sendStatus(403); // Forbidden
+    }
+
+    const updatedData = existingChart.data!.concat(formDataToSubmit);
+
+    const updatedChart = await prisma.plot.update({
+      where: {
+        id: existingChart.id,
+      },
+      data: {
+        data: updatedData,
+      },
+    });
+
+    return res.status(200).json(updatedChart);
+  } catch (error) {
+    console.error("Error adding chart data:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
