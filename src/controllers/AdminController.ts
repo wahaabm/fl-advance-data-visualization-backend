@@ -47,6 +47,28 @@ export async function showUsers(req: Request, res: Response) {
   }
 }
 
+export async function showEditors(req: Request, res: Response) {
+  try {
+    const { role } = req.authorizedData!;
+    if (role === "ADMIN_USER") {
+      const editorUsers = await prisma.user.findMany({
+        where: {
+          role: "EDITOR_USER",
+        },
+        orderBy: {
+          id: "asc",
+        },
+      });
+      res.status(201).send(editorUsers);
+    } else {
+      res.status(403).json({ message: "Forbidden." });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error!" });
+  }
+}
+
 export async function makeEditor(req: Request, res: Response): Promise<void> {
   const { role } = req.authorizedData!;
   const { userId } = req.params;

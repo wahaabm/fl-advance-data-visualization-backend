@@ -37,7 +37,12 @@ const checkToken = (req: Request, res: Response, next: NextFunction): void => {
         token,
         privatekey
       ) as JwtPayload;
+      if (Date.now() >= authorizedData.exp! * 1000) {
+        res.sendStatus(403);
+        return;
+      }
       req.authorizedData = authorizedData;
+
       next();
     } catch (err) {
       console.log("ERROR: Could not connect to the protected route");

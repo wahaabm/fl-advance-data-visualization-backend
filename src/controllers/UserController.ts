@@ -11,7 +11,7 @@ export async function showArticles(req: Request, res: Response) {
   if (!user) {
     res.sendStatus(404);
   } else if (user.isAuthorized == false) {
-    res.sendStatus(403);
+    res.sendStatus(405);
   } else {
     const articles = await prisma.article.findMany({});
     res.status(201).json(articles);
@@ -20,6 +20,7 @@ export async function showArticles(req: Request, res: Response) {
 
 export async function showCharts(req: Request, res: Response) {
   const { role, email } = req.authorizedData!;
+  console.log(email);
   const user = await prisma.user.findUnique({
     where: {
       email: email,
@@ -28,9 +29,10 @@ export async function showCharts(req: Request, res: Response) {
   if (!user) {
     res.sendStatus(404);
   } else if (user.isAuthorized == false) {
-    res.sendStatus(403);
+    res.sendStatus(405);
   } else {
-    const charts = await prisma.article.findMany({});
+    const charts = await prisma.plot.findMany({});
+    console.log(charts);
     res.status(201).json(charts);
   }
 }

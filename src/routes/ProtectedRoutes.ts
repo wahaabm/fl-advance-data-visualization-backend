@@ -6,6 +6,7 @@ import {
   makeEditor,
   removeEditor,
   revokeUser,
+  showEditors,
   showUsers,
 } from "../controllers/AdminController";
 import {
@@ -25,6 +26,7 @@ protectedRouter.post("/allowUser/:userId", checkToken, allowUser);
 protectedRouter.post("/revokeUser/:userId", checkToken, revokeUser);
 protectedRouter.post("/removeEditor/:userId", checkToken, removeEditor);
 protectedRouter.post("/makeEditor/:userId", checkToken, makeEditor);
+protectedRouter.get("/editors", checkToken, showEditors);
 
 protectedRouter.post("/article", checkToken, addArticle);
 protectedRouter.delete("/article/:articleId", checkToken, deleteArticle);
