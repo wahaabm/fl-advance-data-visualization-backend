@@ -1,9 +1,15 @@
 import express from "express";
-import { showArticles, showCharts } from "../controllers/UserController";
+import {
+  readArticle,
+  showArticles,
+  showCharts,
+} from "../controllers/UserController";
 import checkToken from "../middlewares/checkToken";
 
 const userRouter = express.Router();
 
 userRouter.get("/articles", checkToken, showArticles);
+userRouter.get("/article/:articleId", checkToken, readArticle);
+
 userRouter.get("/charts", checkToken, showCharts);
 export default userRouter;

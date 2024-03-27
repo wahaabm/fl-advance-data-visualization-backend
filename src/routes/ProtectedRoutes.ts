@@ -14,7 +14,11 @@ import {
   deleteArticle,
   editArticle,
 } from "../controllers/ArticleController";
-import { uploadChartCSV, deleteChart, addChartData } from "../controllers/ChartController";
+import {
+  uploadChartCSV,
+  deleteChart,
+  addChartData,
+} from "../controllers/ChartController";
 import multer from "multer";
 
 const protectedRouter = express.Router();
@@ -38,7 +42,7 @@ protectedRouter.post(
   checkToken,
   uploadChartCSV
 );
-protectedRouter.delete("/deleteChart/:chartId", checkToken, deleteChart);
-protectedRouter.put("/chart/:chartId",checkToken,addChartData);
+protectedRouter.delete("/chart/:chartId", checkToken, deleteChart);
+protectedRouter.put("/chart/:chartId", checkToken, addChartData);
 
 export default protectedRouter;

@@ -3,13 +3,12 @@ import prisma from "../utils/prismaClient";
 import { parse } from "csv-parse/sync";
 
 export async function uploadChartCSV(req: Request, res: Response) {
-  const { id:userId,role } = req.authorizedData!;
-  
+  const { id: userId, role } = req.authorizedData!;
+  const { title, description } = req.body;
   if (role !== "ADMIN_USER" && role !== "EDITOR_USER") {
     res.sendStatus(403);
   }
   const csvData = req.file?.buffer.toString("utf8");
-  // Initialize the parser
   const records = parse(csvData!, {
     columns: true,
     skip_empty_lines: true,
@@ -19,7 +18,8 @@ export async function uploadChartCSV(req: Request, res: Response) {
   try {
     await prisma.plot.create({
       data: {
-        title: "test plot",
+        title: title,
+        description: description,
         data: records,
         authorId: parseInt(userId),
       },
@@ -32,22 +32,40 @@ export async function uploadChartCSV(req: Request, res: Response) {
 
 export async function deleteChart(req: Request, res: Response) {
   const { chartId } = req.params;
-  const { role } = req.authorizedData!;
+  const { role, userId } = req.authorizedData!;
+
   if (role !== "ADMIN_USER" && role !== "EDITOR_USER") {
     res.sendStatus(403);
     return;
   }
-  // Initialize the parser
+
   try {
+    const existingChart = await prisma.plot.findUnique({
+      where: {
+        id: parseInt(chartId),
+      },
+    });
+
+    if (!existingChart) {
+      res.sendStatus(404);
+      return;
+    }
+
+    if (role === "EDITOR_USER" && existingChart.authorId !== userId) {
+      res.sendStatus(403);
+      return;
+    }
+
     await prisma.plot.delete({
       where: {
         id: parseInt(chartId),
       },
     });
-    res.sendStatus(200);
+
+    res.sendStatus(200); // Success
   } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
+    console.error(error);
+    res.sendStatus(500); // Internal Server Error
   }
 }
 
@@ -61,10 +79,10 @@ export async function addChartData(req: Request, res: Response) {
     }
 
     const { formDataToSubmit } = req.body;
-    console.log(formDataToSubmit)
+    console.log(formDataToSubmit);
     const existingChart = await prisma.plot.findUnique({
       where: {
-        id: parseInt(chartId), 
+        id: parseInt(chartId),
       },
     });
 

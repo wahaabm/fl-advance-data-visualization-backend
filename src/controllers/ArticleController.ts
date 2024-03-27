@@ -43,40 +43,57 @@ export async function addArticle(req: Request, res: Response) {
 }
 export async function editArticle(req: Request, res: Response) {
   const { title, content } = req.body;
-  const articleId = parseInt(req.params.userId);
-  const { role, id: userId } = req.authorizedData!;
-  if (role === "ADMIN_USER" || role == "EDITOR_USER") {
-    try {
+  const articleId = parseInt(req.params.articleId);
+  const { role, id: authorId } = req.authorizedData!;
+
+  try {
+    if (
+      role === "ADMIN_USER" ||
+      (role === "EDITOR_USER" && (await isArticleAuthor(articleId, authorId)))
+    ) {
       const editArticle = await prisma.article.update({
-        where: {
-          id: articleId,
-          authorId: userId,
-        },
-        data: {
-          title,
-          content,
-        },
+        where: { id: articleId },
+        data: { title, content },
       });
-      editArticle ? res.sendStatus(200) : res.sendStatus(403);
-    } catch (error) {
-      console.error("Error adding article:", error);
-      return res.status(500).json({ error: "Internal server error" });
+      editArticle ? res.sendStatus(200) : res.sendStatus(404);
+    } else {
+      res.sendStatus(403);
     }
-  } else {
-    res.status(403);
+  } catch (error) {
+    console.error("Error editing article:", error);
+    res.sendStatus(500);
   }
+}
+
+async function isArticleAuthor(
+  articleId: number,
+  userId: number
+): Promise<boolean> {
+  const article = await prisma.article.findUnique({
+    where: { id: articleId },
+    select: { authorId: true },
+  });
+  return article?.authorId === userId;
 }
 
 export async function deleteArticle(req: Request, res: Response) {
   const articleId = parseInt(req.params.articleId);
   const { role, id: userId } = req.authorizedData!;
-  if (role === "ADMIN_USER" || role === "EDITOR_USER") {
+
+  if (role === "ADMIN_USER") {
     try {
       const article = await prisma.article.delete({
-        where: {
-          id: articleId,
-          authorId: userId,
-        },
+        where: { id: articleId },
+      });
+      article ? res.sendStatus(200) : res.sendStatus(404);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500);
+    }
+  } else if (role === "EDITOR_USER") {
+    try {
+      const article = await prisma.article.delete({
+        where: { id: articleId, authorId: userId },
       });
       article ? res.sendStatus(200) : res.sendStatus(403);
     } catch (error) {
