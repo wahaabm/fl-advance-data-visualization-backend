@@ -41,6 +41,7 @@ const checkToken = (req: Request, res: Response, next: NextFunction): void => {
         res.sendStatus(403);
         return;
       }
+      console.log(authorizedData);
       req.authorizedData = authorizedData;
 
       next();

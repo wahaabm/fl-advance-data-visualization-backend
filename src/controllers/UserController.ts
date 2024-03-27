@@ -24,7 +24,6 @@ export async function showArticles(req: Request, res: Response) {
 
 export async function showCharts(req: Request, res: Response) {
   const { role, email } = req.authorizedData!;
-  console.log(email);
   const user = await prisma.user.findUnique({
     where: {
       email: email,

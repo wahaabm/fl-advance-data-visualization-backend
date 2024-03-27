@@ -46,8 +46,6 @@ export async function register(req: Request, res: Response): Promise<void> {
       res.status(404).json({ message: "All field are required." });
       return;
     }
-    console.log(email, username);
-
     const existingUser = await prisma.user.findUnique({
       where: {
         email: email,

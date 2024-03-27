@@ -13,7 +13,6 @@ export async function uploadChartCSV(req: Request, res: Response) {
     columns: true,
     skip_empty_lines: true,
   });
-  console.log(records);
 
   try {
     await prisma.plot.create({
@@ -32,7 +31,7 @@ export async function uploadChartCSV(req: Request, res: Response) {
 
 export async function deleteChart(req: Request, res: Response) {
   const { chartId } = req.params;
-  const { role, userId } = req.authorizedData!;
+  const { role, id: userId } = req.authorizedData!;
 
   if (role !== "ADMIN_USER" && role !== "EDITOR_USER") {
     res.sendStatus(403);
@@ -72,14 +71,12 @@ export async function deleteChart(req: Request, res: Response) {
 export async function addChartData(req: Request, res: Response) {
   try {
     const { chartId } = req.params;
-    const { role, userId } = req.authorizedData!;
-
+    const { role, id: userId } = req.authorizedData!;
     if (role !== "ADMIN_USER" && role !== "EDITOR_USER") {
       return res.sendStatus(403); // Forbidden
     }
 
     const { formDataToSubmit } = req.body;
-    console.log(formDataToSubmit);
     const existingChart = await prisma.plot.findUnique({
       where: {
         id: parseInt(chartId),
