@@ -1,0 +1,11 @@
+{
+  "arrowParens": "always",
+  "htmlWhitespaceSensitivity": "ignore",
+  "semi": false,
+  "singleAttributePerLine": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "useTabs": false,
+  "vueIndentScriptAndStyle": false
+}
