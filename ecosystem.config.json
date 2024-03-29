@@ -1,0 +1,8 @@
+{
+  "apps": [
+    {
+      "name": "my-express-app",
+      "script": "pnpm dev"
+    }
+  ]
+}
