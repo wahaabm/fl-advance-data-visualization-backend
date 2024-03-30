@@ -9,16 +9,16 @@ import adminRouter from "./routes/ProtectedRoutes";
 import userRouter from "./routes/UserRoutes";
 dotenv.config();
 
-const app = express();
-app.use(express.json());
-app.use(bodyParser.json());
+const app = express()
+app.use(express.json())
+app.use(bodyParser.json())
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: ['http://localhost:5173', '*'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
-);
+)
 
 const port = process.env.PORT || 3000;
 
@@ -26,5 +26,5 @@ app.use("/auth", authRouter);
 app.use("/admin", adminRouter);
 app.use("/", userRouter);
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+  console.log(`[server]: Server is running at http://localhost:${port}`)
+})

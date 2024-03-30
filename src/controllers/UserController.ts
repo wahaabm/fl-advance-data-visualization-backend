@@ -1,5 +1,5 @@
-import prisma from "../utils/prismaClient";
 import { Request, Response } from "express";
+import prisma from "../utils/prismaClient";
 
 export async function showArticles(req: Request, res: Response) {
   const { role, email } = req.authorizedData!;

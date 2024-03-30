@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "args": "dev",
+      "name": "my-express-app",
+      "script": "pnpm",
+      "watch": true
+    }
+  ]
+}

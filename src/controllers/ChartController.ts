@@ -1,6 +1,6 @@
+import { parse } from "csv-parse/sync";
 import { Request, Response } from "express";
 import prisma from "../utils/prismaClient";
-import { parse } from "csv-parse/sync";
 
 export async function uploadChartCSV(req: Request, res: Response) {
   const { id: userId, role } = req.authorizedData!;
