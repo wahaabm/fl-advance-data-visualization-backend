@@ -25,6 +25,24 @@ const port = process.env.PORT || 3000;
 const hashedPassword = bcrypt.hashSync("admin@123", 12);
 const db = new PrismaClient();
 
+db.user.upsert({
+  where: {
+    email: "admin@admin.com",
+  },
+  create: {
+    email: "admin@admin.com",
+    hashedPassword,
+    isAuthorized: true,
+    role: "ADMIN_USER",
+  },
+  update: {
+    email: "admin@admin.com",
+    hashedPassword,
+    isAuthorized: true,
+    role: "ADMIN_USER",
+  },
+});
+
 app.use("/auth", authRouter);
 app.use("/admin", adminRouter);
 app.use("/", userRouter);
