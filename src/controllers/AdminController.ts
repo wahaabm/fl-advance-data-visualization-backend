@@ -6,7 +6,7 @@ const privatekey: string = process.env.PRIVATE_KEY!;
 
 export async function allowUser(req: Request, res: Response): Promise<void> {
   const { userId } = req.params; // User ID from the request params
-  const { id } = req.authorizedData;
+  const { id } = req.authorizedData ?? {};
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(id) },
@@ -145,8 +145,7 @@ export async function removeEditor(req: Request, res: Response): Promise<void> {
 
 export async function revokeUser(req: Request, res: Response): Promise<void> {
   const { userId } = req.params; // User ID from the request params
-  const { id } = req.authorizedData;
-  console.log(id);
+  const { id } = req.authorizedData ?? {};
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(id) },
