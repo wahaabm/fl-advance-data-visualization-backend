@@ -88,10 +88,10 @@ export async function addChartData(req: Request, res: Response) {
     }
 
     if (role === "EDITOR_USER" && existingChart.authorId !== userId) {
-      return res.sendStatus(403); // Forbidden
+      return res.sendStatus(403);
     }
 
-    const updatedData = existingChart.data!.concat(formDataToSubmit);
+    const updatedData = (existingChart.data! as any[]).concat(formDataToSubmit);
 
     const updatedChart = await prisma.plot.update({
       where: {

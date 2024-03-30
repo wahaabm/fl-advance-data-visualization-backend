@@ -15,7 +15,7 @@ export async function showArticles(req: Request, res: Response) {
   } else {
     const articles = await prisma.article.findMany({
       orderBy: {
-        id: "asc",
+        id: "desc",
       },
     });
     res.status(201).json(articles);
@@ -36,7 +36,7 @@ export async function showCharts(req: Request, res: Response) {
   } else {
     const charts = await prisma.plot.findMany({
       orderBy: {
-        id: "asc",
+        id: "desc",
       },
     });
     console.log(charts);
