@@ -12,7 +12,11 @@ app.use(express.json())
 app.use(bodyParser.json())
 app.use(
   cors({
-    origin: ['localhost', '64.23.225.23'],
+    origin: [
+      'http://64.23.225.23',
+      'http://localhost',
+      'http://64.23.225.23:3000',
+    ],
     // methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     optionsSuccessStatus: 200,
