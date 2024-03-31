@@ -2,7 +2,7 @@
   "author": "Wahab",
   "dependencies": {
     "@prisma/client": "^5.11.0",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -14,7 +14,7 @@
   },
   "description": "",
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/body-parser": "~1.19.5",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
@@ -30,16 +30,16 @@
   "license": "ISC",
   "main": "dist/index.js",
   "name": "backend",
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "scripts": {
     "build": "tsc",
+    "db-seed": "prisma db seed",
     "dev": "tsx watch ./src/index.ts",
     "start": "pm2 start ecosystem.config.json",
     "stop": "pm2 stop ecosystem.config.json",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "db-seed": "prisma db seed"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "version": "1.0.0"
 }
