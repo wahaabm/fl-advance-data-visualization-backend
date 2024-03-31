@@ -1,18 +1,18 @@
-import prisma from "../src/utils/prismaClient";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcryptjs'
+import prisma from '../src/utils/prismaClient'
 
-const hashedPassword = bcrypt.hashSync("admin@123", 12);
+const hashedPassword = bcrypt.hashSync('admin@123', 12)
 
-(async function createAdmin() {
+;(async function createAdmin() {
   const adminUser = await prisma.user.upsert({
-    where: { email: "admin@admin.com" },
+    where: { email: 'admin@admin.com' },
     update: {},
     create: {
-      email: "admin@admin.com",
-      name: "Administrator",
+      email: 'admin@admin.com',
+      name: 'Administrator',
       hashedPassword: hashedPassword,
-      role: "ADMIN_USER",
+      role: 'ADMIN_USER',
       isAuthorized: true,
     },
-  });
-})();
+  })
+})()
