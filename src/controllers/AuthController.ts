@@ -30,7 +30,8 @@ export async function login(req: Request, res: Response): Promise<void> {
       user.id,
       user.email,
       user.role,
-      user.isAuthorized
+      user.isAuthorized,
+      user.name!,
     )
     res.status(200).json({ message: 'Login successful', token })
   } catch (error) {
