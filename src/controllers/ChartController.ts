@@ -25,6 +25,7 @@ export async function uploadChartCSV(req: Request, res: Response) {
     });
     res.sendStatus(200);
   } catch (error) {
+    res.sendStatus(500);
     console.log(error);
   }
 }
