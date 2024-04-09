@@ -1,6 +1,5 @@
-import express from "express";
-import { login, register } from "../controllers/AuthController";
-import checkToken from "../middlewares/checkToken";
+import express from 'express'
+import multer from 'multer'
 import {
   allowUser,
   makeEditor,
@@ -8,41 +7,41 @@ import {
   revokeUser,
   showEditors,
   showUsers,
-} from "../controllers/AdminController";
+} from '../controllers/AdminController'
 import {
   addArticle,
   deleteArticle,
   editArticle,
-} from "../controllers/ArticleController";
+} from '../controllers/ArticleController'
 import {
-  uploadChartCSV,
-  deleteChart,
   addChartData,
-} from "../controllers/ChartController";
-import multer from "multer";
+  deleteChart,
+  uploadChartCSV,
+} from '../controllers/ChartController'
+import checkToken from '../middlewares/checkToken'
 
-const protectedRouter = express.Router();
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const protectedRouter = express.Router()
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 
-protectedRouter.get("/users", checkToken, showUsers);
-protectedRouter.post("/allowUser/:userId", checkToken, allowUser);
-protectedRouter.post("/revokeUser/:userId", checkToken, revokeUser);
-protectedRouter.post("/removeEditor/:userId", checkToken, removeEditor);
-protectedRouter.post("/makeEditor/:userId", checkToken, makeEditor);
-protectedRouter.get("/editors", checkToken, showEditors);
+protectedRouter.get('/users', checkToken, showUsers)
+protectedRouter.post('/allowUser/:userId', checkToken, allowUser)
+protectedRouter.post('/revokeUser/:userId', checkToken, revokeUser)
+protectedRouter.post('/removeEditor/:userId', checkToken, removeEditor)
+protectedRouter.post('/makeEditor/:userId', checkToken, makeEditor)
+protectedRouter.get('/editors', checkToken, showEditors)
 
-protectedRouter.post("/article", checkToken, addArticle);
-protectedRouter.delete("/article/:articleId", checkToken, deleteArticle);
-protectedRouter.put("/article/:articleId", checkToken, editArticle);
+protectedRouter.post('/article', checkToken, addArticle)
+protectedRouter.delete('/article/:articleId', checkToken, deleteArticle)
+protectedRouter.put('/article/:articleId', checkToken, editArticle)
 
 protectedRouter.post(
-  "/csv",
-  upload.single("csvFile"),
+  '/csv',
+  upload.single('csvFile'),
   checkToken,
   uploadChartCSV
-);
-protectedRouter.delete("/chart/:chartId", checkToken, deleteChart);
-protectedRouter.put("/chart/:chartId", checkToken, addChartData);
+)
+protectedRouter.delete('/chart/:chartId', checkToken, deleteChart)
+protectedRouter.put('/chart/:chartId', checkToken, addChartData)
 
-export default protectedRouter;
+export default protectedRouter
