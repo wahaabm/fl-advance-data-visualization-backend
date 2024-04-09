@@ -13,9 +13,15 @@ app.use(bodyParser.json())
 app.use(
   cors({
     origin: [
-      'http://64.23.225.23',
+      'http://localhost',
+      'http://localhost:3000',
       'http://localhost:5173',
+      'http://64.23.225.23',
       'http://64.23.225.23:3000',
+      'http://64.23.225.23:5173',
+      'http://www.macrobourse.com',
+      'http://www.macrobourse.com:3000',
+      'http://www.macrobourse.com:5173',
     ],
     // methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
