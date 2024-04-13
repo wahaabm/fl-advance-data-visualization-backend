@@ -5,9 +5,6 @@ import prisma from '../utils/prismaClient'
 export async function getSettings(req: Request, res: Response) {
   try {
     const settings = await prisma.settings.findFirst()
-
-    console.log(settings)
-
     res.status(200).json(settings)
   } catch (error) {
     console.log(error)
