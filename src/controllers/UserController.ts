@@ -88,3 +88,5 @@ export async function readArticle(req: Request, res: Response) {
     res.status(201).json(articles)
   }
 }
+
+// TODO: load only published articles exept admin
