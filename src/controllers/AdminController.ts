@@ -42,7 +42,7 @@ export async function showUsers(req: Request, res: Response) {
         },
       })
       if (user?.isAuthorized !== true) {
-        res.sendStatus(403)
+        res.sendStatus(401)
         return
       }
       const allUsers = await prisma.user.findMany({

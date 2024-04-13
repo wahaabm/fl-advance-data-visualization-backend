@@ -1,4 +1,5 @@
 import express from 'express'
+import { getSettings } from '../controllers/SettingsController'
 import {
   readArticle,
   showArticles,
@@ -14,4 +15,7 @@ userRouter.get('/articles', checkToken, showArticles)
 userRouter.get('/article/:articleId', checkToken, readArticle)
 
 userRouter.get('/charts', checkToken, showCharts)
+
+userRouter.get('/settings', checkToken, getSettings)
+
 export default userRouter

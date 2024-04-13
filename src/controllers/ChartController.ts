@@ -6,7 +6,7 @@ export async function uploadChartCSV(req: Request, res: Response) {
   const { id: userId, role } = req.authorizedData!
   const { title, description } = req.body
   if (role !== 'ADMIN_USER' && role !== 'EDITOR_USER') {
-    res.sendStatus(403)
+    res.sendStatus(401)
   }
   const csvData = req.file?.buffer.toString('utf8')
   const records = parse(csvData!, {
@@ -35,7 +35,7 @@ export async function deleteChart(req: Request, res: Response) {
   const { role, id: userId } = req.authorizedData!
 
   if (role !== 'ADMIN_USER' && role !== 'EDITOR_USER') {
-    res.sendStatus(403)
+    res.sendStatus(401)
     return
   }
 
@@ -52,7 +52,7 @@ export async function deleteChart(req: Request, res: Response) {
     }
 
     if (role === 'EDITOR_USER' && existingChart.authorId !== userId) {
-      res.sendStatus(403)
+      res.sendStatus(401)
       return
     }
 
@@ -74,7 +74,7 @@ export async function addChartData(req: Request, res: Response) {
     const { chartId } = req.params
     const { role, id: userId } = req.authorizedData!
     if (role !== 'ADMIN_USER' && role !== 'EDITOR_USER') {
-      return res.sendStatus(403) // Forbidden
+      return res.sendStatus(401) // Forbidden
     }
 
     const { formDataToSubmit } = req.body
@@ -89,7 +89,7 @@ export async function addChartData(req: Request, res: Response) {
     }
 
     if (role === 'EDITOR_USER' && existingChart.authorId !== userId) {
-      return res.sendStatus(403)
+      return res.sendStatus(401)
     }
 
     const updatedData = (existingChart.data! as any[]).concat(formDataToSubmit)

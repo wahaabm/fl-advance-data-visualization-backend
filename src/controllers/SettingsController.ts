@@ -2,25 +2,10 @@ import { Request, Response } from 'express'
 import prisma from '../utils/prismaClient'
 
 export async function getSettings(req: Request, res: Response) {
-  const { id } = req.authorizedData ?? {}
-
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: parseInt(id) },
-    })
+    const settings = await prisma.settings.findFirst()
 
-    if (!user) {
-      res.status(401).json({ message: 'Unauthorized' })
-      return
-    }
-
-    if (user.role === 'ADMIN_USER' || user.role === 'EDITOR_USER') {
-      const settings = await prisma.settings.findFirst()
-
-      res.status(200).json(settings)
-    } else {
-      res.status(401).json({ message: 'Unauthorized' })
-    }
+    res.status(200).json(settings)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Internal server error' })

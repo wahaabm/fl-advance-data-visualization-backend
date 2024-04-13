@@ -56,7 +56,7 @@ export async function editArticle(req: Request, res: Response) {
       })
       editArticle ? res.sendStatus(200) : res.sendStatus(404)
     } else {
-      res.sendStatus(403)
+      res.sendStatus(401)
     }
   } catch (error) {
     console.error('Error editing article:', error)
@@ -94,12 +94,12 @@ export async function deleteArticle(req: Request, res: Response) {
       const article = await prisma.article.delete({
         where: { id: articleId, authorId: userId },
       })
-      article ? res.sendStatus(200) : res.sendStatus(403)
+      article ? res.sendStatus(200) : res.sendStatus(401)
     } catch (error) {
       console.log(error)
       res.sendStatus(500)
     }
   } else {
-    res.sendStatus(403)
+    res.sendStatus(401)
   }
 }
