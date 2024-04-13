@@ -1,9 +1,12 @@
+import { defu } from 'defu'
 import { Request, Response } from 'express'
 import prisma from '../utils/prismaClient'
 
 export async function getSettings(req: Request, res: Response) {
   try {
     const settings = await prisma.settings.findFirst()
+
+    console.log(settings)
 
     res.status(200).json(settings)
   } catch (error) {
@@ -31,12 +34,12 @@ export async function postSettings(req: Request, res: Response) {
   const { role } = req.authorizedData!
 
   if (role !== 'ADMIN_USER') {
-    res.status(401)
+    return res.status(401).end()
   }
 
   try {
     const settings = await prisma.settings.findFirst()
-    const updatedSettings = Object.assign(settings || {}, req.body)
+    const updatedSettings = settings ? defu(req.body, settings) : req.body
 
     if (!settings) {
       const newSettings = await prisma.settings.create({
@@ -45,10 +48,9 @@ export async function postSettings(req: Request, res: Response) {
 
       return res.status(201).json(newSettings)
     } else {
-      const newSettings = await prisma.settings.upsert({
+      const newSettings = await prisma.settings.update({
         where: { id: settings?.id },
-        create: updatedSettings,
-        update: updatedSettings,
+        data: updatedSettings,
       })
 
       return res.status(201).json(newSettings)
