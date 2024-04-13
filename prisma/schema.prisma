@@ -48,13 +48,13 @@ model Plot {
 
 model Settings {
   id                 Int     @id @default(autoincrement())
-  googleTagManager   String?
-  facebookPixelId    String?
-  facebookPixelToken String?
-  twitter            String?
-  facebook           String?
-  linkedIn           String?
-  youtube            String?
-  previous           String?
-  actual             String?
+  googleTagManager   String? @default("")
+  facebookPixelId    String? @default("")
+  facebookPixelToken String? @default("")
+  twitter            String? @default("")
+  facebook           String? @default("")
+  linkedIn           String? @default("")
+  youtube            String? @default("")
+  previous           String? @default("")
+  actual             String? @default("")
 }

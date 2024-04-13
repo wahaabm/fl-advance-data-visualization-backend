@@ -38,13 +38,21 @@ export async function postSettings(req: Request, res: Response) {
     const settings = await prisma.settings.findFirst()
     const updatedSettings = Object.assign(settings || {}, req.body)
 
-    const newArticle = await prisma.settings.upsert({
-      where: { id: settings?.id },
-      create: updatedSettings,
-      update: updatedSettings,
-    })
+    if (!settings) {
+      const newSettings = await prisma.settings.create({
+        data: updatedSettings,
+      })
 
-    return res.status(201).json(newArticle)
+      return res.status(201).json(newSettings)
+    } else {
+      const newSettings = await prisma.settings.upsert({
+        where: { id: settings?.id },
+        create: updatedSettings,
+        update: updatedSettings,
+      })
+
+      return res.status(201).json(newSettings)
+    }
   } catch (error) {
     console.error('Error adding article:', error)
     return res.status(500).json({ error: 'Internal server error' })
