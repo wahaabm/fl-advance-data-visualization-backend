@@ -18,6 +18,7 @@ import {
   deleteChart,
   uploadChartCSV,
 } from '../controllers/ChartController'
+import { getSettings, postSettings } from '../controllers/Settings'
 import checkToken from '../middlewares/checkToken'
 
 const protectedRouter = express.Router()
@@ -43,5 +44,8 @@ protectedRouter.post(
 )
 protectedRouter.delete('/chart/:chartId', checkToken, deleteChart)
 protectedRouter.put('/chart/:chartId', checkToken, addChartData)
+
+protectedRouter.get('/settings', checkToken, getSettings)
+protectedRouter.post('/settings', checkToken, postSettings)
 
 export default protectedRouter

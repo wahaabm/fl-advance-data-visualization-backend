@@ -45,3 +45,16 @@ model Plot {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Settings {
+  id                 Int     @id @default(autoincrement())
+  googleTagManager   String?
+  facebookPixelId    String?
+  facebookPixelToken String?
+  twitter            String?
+  facebook           String?
+  linkedIn           String?
+  youtube            String?
+  previous           String?
+  actual             String?
+}

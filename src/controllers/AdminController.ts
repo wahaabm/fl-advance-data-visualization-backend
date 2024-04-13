@@ -11,7 +11,7 @@ export async function allowUser(req: Request, res: Response): Promise<void> {
     })
 
     if (!user) {
-      res.status(404).json({ message: 'User not found!' })
+      res.status(401).json({ message: 'Unauthorized' })
       return
     }
 
@@ -24,7 +24,7 @@ export async function allowUser(req: Request, res: Response): Promise<void> {
         .status(201)
         .json({ message: 'User has been unauthorized to use the app.' })
     } else {
-      res.status(403).json({ message: 'Unauthorized role' })
+      res.status(401).json({ message: 'Unauthorized' })
     }
   } catch (error) {
     console.log(error)
@@ -55,7 +55,7 @@ export async function showUsers(req: Request, res: Response) {
       })
       res.status(201).send(allUsers)
     } else {
-      res.status(403).json({ message: 'Forbidden.' })
+      res.status(401).json({ message: 'Forbidden.' })
     }
   } catch (error) {
     console.log(error)
@@ -77,7 +77,7 @@ export async function showEditors(req: Request, res: Response) {
       })
       res.status(201).send(editorUsers)
     } else {
-      res.status(403).json({ message: 'Forbidden.' })
+      res.status(401).json({ message: 'Forbidden.' })
     }
   } catch (error) {
     console.log(error)
@@ -93,7 +93,7 @@ export async function makeEditor(req: Request, res: Response): Promise<void> {
       where: { id: parseInt(id) },
     })
     if (!user) {
-      res.status(404).json({ message: 'User not found!' })
+      res.status(401).json({ message: 'Unauthorized' })
       return
     }
     if (user.role === 'ADMIN_USER') {
@@ -105,7 +105,7 @@ export async function makeEditor(req: Request, res: Response): Promise<void> {
         message: 'User has been authorized to use the app as an editor',
       })
     } else {
-      res.status(403).json({ message: 'Unauthorized role' })
+      res.status(401).json({ message: 'Unauthorized' })
     }
   } catch (error) {
     console.log(error)
@@ -121,7 +121,7 @@ export async function removeEditor(req: Request, res: Response): Promise<void> {
       where: { id: parseInt(id) },
     })
     if (!user) {
-      res.status(404).json({ message: 'User not found!' })
+      res.status(401).json({ message: 'Unauthorized' })
       return
     }
     if (user.role === 'ADMIN_USER') {
@@ -133,7 +133,7 @@ export async function removeEditor(req: Request, res: Response): Promise<void> {
         message: 'User has been unauthorized to use the app as an editor',
       })
     } else {
-      res.status(403).json({ message: 'Unauthorized role' })
+      res.status(401).json({ message: 'Unauthorized' })
     }
   } catch (error) {
     console.log(error)
@@ -150,7 +150,7 @@ export async function revokeUser(req: Request, res: Response): Promise<void> {
     })
 
     if (!user) {
-      res.status(404).json({ message: 'User not found!' })
+      res.status(401).json({ message: 'Unauthorized' })
       return
     }
 
@@ -163,7 +163,7 @@ export async function revokeUser(req: Request, res: Response): Promise<void> {
         .status(201)
         .json({ message: 'User has been unauthorized to use the app.' })
     } else {
-      res.status(403).json({ message: 'Unauthorized role' })
+      res.status(401).json({ message: 'Unauthorized' })
     }
   } catch (error) {
     console.log(error)

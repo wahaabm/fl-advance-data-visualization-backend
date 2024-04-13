@@ -36,7 +36,7 @@ export async function addArticle(req: Request, res: Response) {
       return res.status(500).json({ error: 'Internal server error' })
     }
   } else {
-    res.status(403)
+    res.status(401)
   }
 }
 

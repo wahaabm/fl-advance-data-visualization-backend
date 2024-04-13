@@ -63,7 +63,6 @@ export async function showCharts(req: Request, res: Response) {
         id: 'desc',
       },
     })
-    console.log(charts)
     res.status(201).json(charts)
   }
 }
