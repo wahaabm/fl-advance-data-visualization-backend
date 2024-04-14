@@ -1,9 +1,11 @@
 import express from 'express'
 import multer from 'multer'
 import {
+  allowAllUser,
   allowUser,
   makeEditor,
   removeEditor,
+  revokeAllUser,
   revokeUser,
   showEditors,
   showUsers,
@@ -26,6 +28,8 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
 protectedRouter.get('/users', checkToken, showUsers)
+protectedRouter.post('/allowAllUser', checkToken, allowAllUser)
+protectedRouter.post('/revokeAllUser', checkToken, revokeAllUser)
 protectedRouter.post('/allowUser/:userId', checkToken, allowUser)
 protectedRouter.post('/revokeUser/:userId', checkToken, revokeUser)
 protectedRouter.post('/removeEditor/:userId', checkToken, removeEditor)
