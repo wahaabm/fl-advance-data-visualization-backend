@@ -1,18 +1,23 @@
-// import bodyParser from 'body-parser'
+import compression from 'compression'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import adminRouter from './routes/ProtectedRoutes'
 import userRouter from './routes/UserRoutes'
 import authRouter from './routes/authRoutes'
+
 dotenv.config()
 
 const app = express()
+
 app.use(
   express.json({
     limit: '50mb',
   })
 )
+
+app.use(compression())
+
 // app.use(bodyParser.json({ limit: '50mb' }))
 app.use(
   cors({
