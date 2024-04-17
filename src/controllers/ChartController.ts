@@ -28,7 +28,8 @@ export async function uploadChartCSV(req: Request, res: Response) {
 
     keys.forEach((key) => {
       const value = record[key]
-      const parsedValue = key === 'date' ? Date.parse(value) : value
+      const parsedValue =
+        key.toLocaleLowerCase() === 'date' ? Date.parse(value) : value
 
       newRecord[key.toLocaleLowerCase()] = parsedValue
     })
