@@ -24,10 +24,13 @@ export async function uploadChartCSV(req: Request, res: Response) {
 
   const keys = Object.keys(records[0])
   const normalizedRecords = records.map((record) => {
-    const newRecord: { [key: string]: string } = {}
+    const newRecord: { [key: string]: string | number } = {}
 
     keys.forEach((key) => {
-      newRecord[key.toLocaleLowerCase()] = record[key]
+      const value = record[key]
+      const parsedValue = key === 'date' ? Date.parse(value) : value
+
+      newRecord[key.toLocaleLowerCase()] = parsedValue
     })
 
     return newRecord
