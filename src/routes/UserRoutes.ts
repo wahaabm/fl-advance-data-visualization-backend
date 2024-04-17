@@ -16,6 +16,6 @@ userRouter.get('/article/:articleId', checkToken, readArticle)
 
 userRouter.get('/charts', checkToken, showCharts)
 
-userRouter.get('/settings', checkToken, getSettings)
+userRouter.get('/settings', getSettings)
 
 export default userRouter
