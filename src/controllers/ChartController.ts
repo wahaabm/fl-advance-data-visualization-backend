@@ -125,8 +125,10 @@ export async function addChartData(req: Request, res: Response) {
       where: {
         id: existingChart.id,
       },
-      // @ts-ignore
-      data: existingChart,
+      data: {
+        // @ts-ignore
+        data: existingChart.data,
+      },
     })
 
     return res.status(200).json(updatedChart)
