@@ -12,6 +12,25 @@ export async function uploadChartCSV(req: Request, res: Response) {
   const records = parse(csvData!, {
     columns: true,
     skip_empty_lines: true,
+    trim: true,
+  }) as Array<{
+    Date: string
+    [key: string]: string
+  }>
+
+  if (!records || records.length === 0) {
+    res.sendStatus(200)
+  }
+
+  const keys = Object.keys(records[0])
+  const normalizedRecords = records.map((record) => {
+    const newRecord: { [key: string]: string } = {}
+
+    keys.forEach((key) => {
+      newRecord[key.toLocaleLowerCase()] = record[key]
+    })
+
+    return newRecord
   })
 
   try {
@@ -19,7 +38,7 @@ export async function uploadChartCSV(req: Request, res: Response) {
       data: {
         title: title,
         description: description,
-        data: records,
+        data: normalizedRecords,
         authorId: parseInt(userId),
       },
     })
@@ -77,7 +96,7 @@ export async function addChartData(req: Request, res: Response) {
       return res.sendStatus(401) // Forbidden
     }
 
-    const { formDataToSubmit } = req.body
+    const formData = req.body
     const existingChart = await prisma.plot.findUnique({
       where: {
         id: parseInt(chartId),
@@ -92,15 +111,18 @@ export async function addChartData(req: Request, res: Response) {
       return res.sendStatus(401)
     }
 
-    const updatedData = (existingChart.data! as any[]).concat(formDataToSubmit)
+    ;(
+      existingChart.data as Array<{
+        [key: string]: string
+      }>
+    ).push(formData)
 
     const updatedChart = await prisma.plot.update({
       where: {
         id: existingChart.id,
       },
-      data: {
-        data: updatedData,
-      },
+      // @ts-ignore
+      data: existingChart,
     })
 
     return res.status(200).json(updatedChart)
