@@ -5,9 +5,11 @@ import prisma from '../utils/prismaClient'
 export async function uploadChartCSV(req: Request, res: Response) {
   const { id: userId, role } = req.authorizedData!
   const { title, description } = req.body
+
   if (role !== 'ADMIN_USER' && role !== 'EDITOR_USER') {
     res.sendStatus(401)
   }
+
   const csvData = req.file?.buffer.toString('utf8')
   const records = parse(csvData!, {
     columns: true,
@@ -28,10 +30,10 @@ export async function uploadChartCSV(req: Request, res: Response) {
 
     keys.forEach((key) => {
       const value = record[key]
-      const parsedValue =
-        key.toLocaleLowerCase() === 'date' ? Date.parse(value) : value
+      // const parsedValue =
+      //   key.toLocaleLowerCase() === 'date' ? Date.parse(value) : value
 
-      newRecord[key.toLocaleLowerCase()] = parsedValue
+      newRecord[key.toLocaleLowerCase()] = value
     })
 
     return newRecord
@@ -115,11 +117,22 @@ export async function addChartData(req: Request, res: Response) {
       return res.sendStatus(401)
     }
 
-    ;(
-      existingChart.data as Array<{
-        [key: string]: string
-      }>
-    ).push(formData)
+    const data = existingChart.data as Array<{
+      [key: string]: string | number
+    }>
+    let isReplaced = false
+
+    for (let i = 0; i < data.length; i += 1) {
+      if (data[i].date === formData.date) {
+        isReplaced = true
+        data[i] = formData
+        break
+      }
+    }
+
+    if (!isReplaced) {
+      data.push(formData)
+    }
 
     const updatedChart = await prisma.plot.update({
       where: {
@@ -127,7 +140,7 @@ export async function addChartData(req: Request, res: Response) {
       },
       data: {
         // @ts-ignore
-        data: existingChart.data,
+        data,
       },
     })
 
