@@ -1,22 +1,23 @@
-import compression from 'compression'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import express from 'express'
-import adminRouter from './routes/ProtectedRoutes'
-import userRouter from './routes/UserRoutes'
-import authRouter from './routes/authRoutes'
+import compression from 'compression';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import adminRouter from './routes/ProtectedRoutes';
+import userRouter from './routes/UserRoutes';
+import authRouter from './routes/authRoutes';
+import path from 'path';
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
+const app = express();
 
 app.use(
   express.json({
     limit: '50mb',
-  })
-)
+  }),
+);
 
-app.use(compression())
+app.use(compression());
 
 // app.use(bodyParser.json({ limit: '50mb' }))
 app.use(
@@ -44,19 +45,19 @@ app.use(
     // methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     optionsSuccessStatus: 200,
-  })
-)
+  }),
+);
 
-const port = parseInt(process.env.PORT || '3000')
+const port = parseInt(process.env.PORT || '3000');
 
 app.use('/status', (req, res) => {
-  res.send('Server is running')
-})
+  res.send('Server is running');
+});
 
-app.use('/auth', authRouter)
-app.use('/admin', adminRouter)
-app.use('/', userRouter)
+app.use('/auth', authRouter);
+app.use('/admin', adminRouter);
+app.use('/', userRouter);
 
 app.listen(port, '0.0.0.0', () => {
-  console.log(`[server]: Server is running at ${port}`)
-})
+  console.log(`[server]: Server is running at ${port}`);
+});

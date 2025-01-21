@@ -1,18 +1,18 @@
-import { Request, Response } from 'express'
-import prisma from '../utils/prismaClient'
-const privatekey: string = process.env.PRIVATE_KEY!
+import { Request, Response } from 'express';
+import prisma from '../utils/prismaClient';
+const privatekey: string = process.env.PRIVATE_KEY!;
 
 export async function allowAllUser(req: Request, res: Response): Promise<void> {
-  const { id } = req.authorizedData ?? {}
+  const { id } = req.authorizedData ?? {};
 
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(id) },
-    })
+    });
 
     if (!user) {
-      res.status(401).json({ message: 'Unauthorized' })
-      return
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
     }
 
     if (user.role === 'ADMIN_USER') {
@@ -21,33 +21,33 @@ export async function allowAllUser(req: Request, res: Response): Promise<void> {
           isAuthorized: false,
         },
         data: { isAuthorized: true },
-      })
+      });
       res
         .status(201)
-        .json({ message: 'Users has been unauthorized to use the app.' })
+        .json({ message: 'Users has been unauthorized to use the app.' });
     } else {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ message: 'Unauthorized' });
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server error' })
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
 
 export async function revokeAllUser(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> {
-  const { id } = req.authorizedData ?? {}
+  const { id } = req.authorizedData ?? {};
 
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(id) },
-    })
+    });
 
     if (!user) {
-      res.status(401).json({ message: 'Unauthorized' })
-      return
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
     }
 
     if (user.role === 'ADMIN_USER') {
@@ -56,61 +56,61 @@ export async function revokeAllUser(
           isAuthorized: true,
         },
         data: { isAuthorized: false },
-      })
+      });
       res
         .status(201)
-        .json({ message: 'Users has been unauthorized to use the app.' })
+        .json({ message: 'Users has been unauthorized to use the app.' });
     } else {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ message: 'Unauthorized' });
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server error' })
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
 
 export async function allowUser(req: Request, res: Response): Promise<void> {
-  const { userId } = req.params // User ID from the request params
-  const { id } = req.authorizedData ?? {}
+  const { userId } = req.params; // User ID from the request params
+  const { id } = req.authorizedData ?? {};
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(id) },
-    })
+    });
 
     if (!user) {
-      res.status(401).json({ message: 'Unauthorized' })
-      return
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
     }
 
     if (user.role === 'ADMIN_USER' || user.role === 'EDITOR_USER') {
       await prisma.user.update({
         where: { id: parseInt(userId) },
         data: { isAuthorized: true },
-      })
+      });
       res
         .status(201)
-        .json({ message: 'User has been unauthorized to use the app.' })
+        .json({ message: 'User has been unauthorized to use the app.' });
     } else {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ message: 'Unauthorized' });
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server error' })
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
 
 export async function showUsers(req: Request, res: Response) {
   try {
-    const { role, id: userId } = req.authorizedData!
+    const { role, id: userId } = req.authorizedData!;
     if (role === 'ADMIN_USER' || role === 'EDITOR_USER') {
       const user = await prisma.user.findUnique({
         where: {
           id: userId,
         },
-      })
+      });
       if (user?.isAuthorized !== true) {
-        res.sendStatus(401)
-        return
+        res.sendStatus(401);
+        return;
       }
       const allUsers = await prisma.user.findMany({
         where: {
@@ -119,20 +119,20 @@ export async function showUsers(req: Request, res: Response) {
         orderBy: {
           id: 'asc',
         },
-      })
-      res.status(201).send(allUsers)
+      });
+      res.status(201).send(allUsers);
     } else {
-      res.status(401).json({ message: 'Forbidden.' })
+      res.status(401).json({ message: 'Forbidden.' });
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server error!' })
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error!' });
   }
 }
 
 export async function showEditors(req: Request, res: Response) {
   try {
-    const { role } = req.authorizedData!
+    const { role } = req.authorizedData!;
     if (role === 'ADMIN_USER') {
       const editorUsers = await prisma.user.findMany({
         where: {
@@ -141,99 +141,99 @@ export async function showEditors(req: Request, res: Response) {
         orderBy: {
           id: 'asc',
         },
-      })
-      res.status(201).send(editorUsers)
+      });
+      res.status(201).send(editorUsers);
     } else {
-      res.status(401).json({ message: 'Forbidden.' })
+      res.status(401).json({ message: 'Forbidden.' });
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server error!' })
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error!' });
   }
 }
 
 export async function makeEditor(req: Request, res: Response): Promise<void> {
-  const { id } = req.authorizedData!
-  const { userId } = req.params
+  const { id } = req.authorizedData!;
+  const { userId } = req.params;
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(id) },
-    })
+    });
     if (!user) {
-      res.status(401).json({ message: 'Unauthorized' })
-      return
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
     }
     if (user.role === 'ADMIN_USER') {
       await prisma.user.update({
         where: { id: parseInt(userId) },
         data: { role: 'EDITOR_USER', isAuthorized: true },
-      })
+      });
       res.status(201).json({
         message: 'User has been authorized to use the app as an editor',
-      })
+      });
     } else {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ message: 'Unauthorized' });
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server error' })
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
 
 export async function removeEditor(req: Request, res: Response): Promise<void> {
-  const { id } = req.authorizedData!
-  const { userId } = req.params
+  const { id } = req.authorizedData!;
+  const { userId } = req.params;
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(id) },
-    })
+    });
     if (!user) {
-      res.status(401).json({ message: 'Unauthorized' })
-      return
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
     }
     if (user.role === 'ADMIN_USER') {
       await prisma.user.update({
         where: { id: parseInt(userId) },
         data: { role: 'NORMAL_USER', isAuthorized: true },
-      })
+      });
       res.status(201).json({
         message: 'User has been unauthorized to use the app as an editor',
-      })
+      });
     } else {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ message: 'Unauthorized' });
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server error' })
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
 
 export async function revokeUser(req: Request, res: Response): Promise<void> {
-  const { userId } = req.params // User ID from the request params
-  const { id } = req.authorizedData ?? {}
+  const { userId } = req.params; // User ID from the request params
+  const { id } = req.authorizedData ?? {};
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(id) },
-    })
+    });
 
     if (!user) {
-      res.status(401).json({ message: 'Unauthorized' })
-      return
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
     }
 
     if (user.role === 'ADMIN_USER' || user.role === 'EDITOR_USER') {
       await prisma.user.update({
         where: { id: parseInt(userId) },
         data: { isAuthorized: false },
-      })
+      });
       res
         .status(201)
-        .json({ message: 'User has been unauthorized to use the app.' })
+        .json({ message: 'User has been unauthorized to use the app.' });
     } else {
-      res.status(401).json({ message: 'Unauthorized' })
+      res.status(401).json({ message: 'Unauthorized' });
     }
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Internal server error' })
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }

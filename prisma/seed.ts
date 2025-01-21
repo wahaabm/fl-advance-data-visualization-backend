@@ -1,9 +1,8 @@
-import bcrypt from 'bcryptjs'
-import prisma from '../src/utils/prismaClient'
+import bcrypt from 'bcryptjs';
+import prisma from '../src/utils/prismaClient';
 
-const hashedPassword = bcrypt.hashSync('admin@123', 12)
-
-;(async function seed() {
+const hashedPassword = bcrypt.hashSync('admin@123', 12);
+(async function seed() {
   await prisma.user.upsert({
     where: { email: 'admin@admin.com' },
     update: {},
@@ -14,9 +13,9 @@ const hashedPassword = bcrypt.hashSync('admin@123', 12)
       role: 'ADMIN_USER',
       isAuthorized: true,
     },
-  })
+  });
 
-  const settings = await prisma.settings.findFirst()
+  const settings = await prisma.settings.findFirst();
 
   if (!settings) {
     await prisma.settings.create({
@@ -28,6 +27,6 @@ const hashedPassword = bcrypt.hashSync('admin@123', 12)
         linkedIn: 'https://linkedIn.com/macrobourse',
         youtube: 'https://youtube.com/macrobourse',
       },
-    })
+    });
   }
-})()
+})();
